@@ -10,7 +10,7 @@
         <h3>Build</h3>
         <ul class="list-unstyled">
             <li>Created At: {{ build_metadata.build_created | dtformat }}</li>
-            <li>Pipeline: <a href="{{ url_for('pipeline_view', pipeline=pipeline) }}">{{ pipeline_metadata.pipeline }}</a></li>
+            <li>Pipeline: <a href="{{ url_for('pipeline_view', pipeline=pipeline) }}">View</a></li>
             <li>Repo: <a href="{{ pipeline_metadata.repo_link }}" rel="noopener noreferrer" target="_blank">{{ pipeline_metadata.repo_name }}</a></li>
         </ul>
     </div>
