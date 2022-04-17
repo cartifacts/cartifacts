@@ -317,4 +317,4 @@ def api_upload():
         ContentType="application/json",
     )
 
-    return Response(response="Success!\n", status=HTTPStatus.OK, content_type="text/plain")
+    return Response(response="Success!\n", status=HTTPStatus.OK, content_type="text/plain; charset=utf-8")
