@@ -44,6 +44,7 @@ boto = Boto3(app)
 
 APP_TZ = ZoneInfo(app.config["CARTIFACTS_TZ"])
 DT_FORMAT = app.config.get("CARTIFACTS_DT_FORMAT", "%Y-%m-%d %H:%M:%S")
+BUCKET = app.config["CARTIFACTS_BUCKET"]
 
 
 @dataclasses.dataclass(frozen=True, order=True, slots=True)
@@ -82,14 +83,14 @@ def home():
 
     pipelines_prefix = "artifacts/pipelines/"
     pipelines_response = s3.list_objects_v2(
-        Bucket=app.config["CARTIFACTS_BUCKET"],
+        Bucket=BUCKET,
         Prefix=pipelines_prefix,
         Delimiter="/",
     )
     pipeline_names: List[str] = list(s3_cp(pipelines_response))
     while pipelines_response["IsTruncated"]:
         pipelines_response = s3.list_objects_v2(
-            Bucket=app.config["CARTIFACTS_BUCKET"],
+            Bucket=BUCKET,
             Prefix=pipelines_prefix,
             Delimiter="/",
             ContinuationToken=pipelines_response["NextContinuationToken"],
@@ -104,14 +105,14 @@ def pipeline_view(pipeline: str):
     s3: S3Client = boto.clients.get("s3")
 
     metadata_response = s3.get_object(
-        Bucket=app.config["CARTIFACTS_BUCKET"],
+        Bucket=BUCKET,
         Key=f"artifacts/pipelines/{pipeline}/metadata.json",
     )
     metadata = json.load(metadata_response["Body"])
 
     builds_prefix = f"artifacts/pipelines/{pipeline}/builds/"
     builds_response = s3.list_objects_v2(
-        Bucket=app.config["CARTIFACTS_BUCKET"],
+        Bucket=BUCKET,
         Prefix=builds_prefix,
         Delimiter="^",
     )
@@ -119,7 +120,7 @@ def pipeline_view(pipeline: str):
     build_sortkeys: List[str] = list(s3_cp(builds_response))
     while builds_response["IsTruncated"]:
         builds_response = s3.list_objects_v2(
-            Bucket=app.config["CARTIFACTS_BUCKET"],
+            Bucket=BUCKET,
             Prefix=builds_prefix,
             Delimiter="^",
             ContinuationToken=builds_response["NextContinuationToken"],
@@ -208,32 +209,32 @@ def api_upload():
     s3: S3Client = boto.clients.get("s3")
 
     s3.put_object(
-        Bucket=app.config["CARTIFACTS_BUCKET"],
+        Bucket=BUCKET,
         Key=artifact_file_key,
         Body=StreamingBody(request.stream, content_length),
         ContentMD5=artifact_md5_header,
         ContentLength=content_length,
     )
     s3.put_object(
-        Bucket=app.config["CARTIFACTS_BUCKET"],
+        Bucket=BUCKET,
         Key=artifact_metadata_key,
         Body=json.dumps(artifact_metadata),
         ContentType="application/json",
     )
     s3.put_object(
-        Bucket=app.config["CARTIFACTS_BUCKET"],
+        Bucket=BUCKET,
         Key=build_metadata_key,
         Body=json.dumps(build_metadata),
         ContentType="application.json",
     )
     s3.put_object(
-        Bucket=app.config["CARTIFACTS_BUCKET"],
+        Bucket=BUCKET,
         Key=builds_sort_key,
         Body=build_id_header,
         ContentType="text/plain",
     )
     s3.put_object(
-        Bucket=app.config["CARTIFACTS_BUCKET"],
+        Bucket=BUCKET,
         Key=pipeline_metadata_key,
         Body=json.dumps(pipeline_metadata),
         ContentType="application/json",
