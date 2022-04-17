@@ -214,7 +214,36 @@ def build_view(pipeline: str, build_id: str):
 
 @app.route("/pipeline/<pipeline>/build/<build_id>/<stage_id>/<step_id>/<artifact_id>", methods=["GET"])
 def artifact_download(pipeline: str, build_id: str, stage_id: str, step_id: str, artifact_id: str):
-    pass
+    s3: S3Client = boto.clients.get("s3")
+
+    artifact_key = f"artifacts/pipelines/{pipeline}/builds/{build_id}/stages/{stage_id}/steps/{step_id}/{artifact_id}"
+    artifact_metadata_key = f"{artifact_key}.json"
+
+    artifact_metadata_response = s3.get_object(
+        Bucket=BUCKET,
+        Key=artifact_metadata_key,
+    )
+    artifact_metadata = json.load(artifact_metadata_response["Body"])
+
+    filename = os.path.basename(artifact_metadata["artifact_path"])
+    content_disposition = f'attachment; filename="{filename}"'
+    url = s3.generate_presigned_url(
+        ClientMethod="get_object",
+        Params={
+            "Bucket": BUCKET,
+            "Key": artifact_key,
+            "ResponseContentDisposition": content_disposition,
+            "ResponseContentType": artifact_metadata["content_type"],
+        },
+        ExpiresIn=60,
+    )
+
+    return Response(
+        response="",
+        status=HTTPStatus.FOUND,
+        mimetype="text/plain",
+        headers={"Location": url},
+    )
 
 
 @app.route("/api/upload", methods=["POST"])
