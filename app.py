@@ -115,8 +115,7 @@ def pipeline_view(pipeline: str):
         Prefix=builds_prefix,
         Delimiter="^",
     )
-    from pprint import pprint
-    pprint(builds_response)
+
     build_sortkeys: List[str] = list(s3_cp(builds_response))
     while builds_response["IsTruncated"]:
         builds_response = s3.list_objects_v2(
@@ -131,7 +130,7 @@ def pipeline_view(pipeline: str):
         parts = build_sortkey.rpartition("$")
         return BuildId(parts[0], parts[2][:-1])
 
-    build_ids_sorted = sorted(map(sep, build_sortkeys))
+    build_ids_sorted = sorted(map(sep, build_sortkeys), reverse=True)
 
     return render_template("pipeline/view.html", pipeline=pipeline, metadata=metadata, build_ids=build_ids_sorted)
 
