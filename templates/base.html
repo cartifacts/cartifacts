@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %} - Cartifacts</title>
+
+    <link href="{{ url_for('static', filename='bootstrap-v5.1.3.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>
