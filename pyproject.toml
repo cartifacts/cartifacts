@@ -1,0 +1,18 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "cartifacts"
+version = "1.0.0"
+description = "A generic storage mechanism for CI artifacts that don't fit anywhere else."
+authors = ["Matthew Gamble <git@matthewgamble.net>"]
+license = "GPL3"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Flask = "^2.1.1"
+boto3 = "^1.21.42"
+
+[tool.poetry.dev-dependencies]
+boto3-stubs = {extras = ["s3"], version = "^1.21.42"}
