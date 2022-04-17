@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ metadata.pipeline }} - View Pipeline{% endblock %}
-
 {% block header %}
-    <h1>{{ metadata.pipeline }}</h1>
+    <h1>{% block title %}{{ metadata.pipeline }}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
 <div class="row">
-    <div class="col col-md-6">
+    <div class="col">
         <h3>Pipeline</h3>
         <ul class="list-unstyled">
             <li>Repo: <a href="{{ metadata.repo_link }}" rel="noopener noreferrer" target="_blank">{{ metadata.repo_name }}</a></li>
@@ -22,7 +20,7 @@
             {% for build_id in build_ids %}
             <a href="{{ url_for('build_view', pipeline=pipeline, build_id=build_id.build_id) }}" class="list-group-item list-group-item-action">
                 {{ build_id.build_id_label }}
-                ({{ build_id.created_at }})
+                ({{ build_id.created_at | dtformat }})
             </a>
             {% endfor %}
         </div>

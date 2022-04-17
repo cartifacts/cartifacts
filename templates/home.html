@@ -10,7 +10,7 @@
         <h3>Pipelines</h3>
         <div class="list-group">
             {% for name in pipeline_names %}
-            <a href="{{ url_for('pipeline_view', pipeline=name) }}" class="list-group-item list-group-item-action">{{ name.replace('$', '/') }}</a>
+            <a href="{{ url_for('pipeline_view', pipeline=name) }}" class="list-group-item list-group-item-action">{{ name | desigil }}</a>
             {% endfor %}
         </div>
     </div>

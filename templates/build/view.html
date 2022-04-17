@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Build {{ build_metadata.build_id }} - {{ pipeline_metadata.pipeline }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h3>Build</h3>
+        <ul class="list-unstyled">
+            <li>Created At: {{ build_metadata.build_created | dtformat }}</li>
+            <li>Pipeline: <a href="{{ url_for('pipeline_view', pipeline=pipeline) }}">{{ pipeline_metadata.pipeline }}</a></li>
+            <li>Repo: <a href="{{ pipeline_metadata.repo_link }}" rel="noopener noreferrer" target="_blank">{{ pipeline_metadata.repo_name }}</a></li>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-lg-6">
+        {% for stage_id, steps in artifacts_metadata.items() %}
+        <h4>{{ stage_id | desigil }}</h4>
+        {% for step_id, artifacts in steps.items() %}
+        <div class="card">
+            <h5 class="card-header">{{ step_id | desigil }}</h5>
+            <ul class="list-group list-group-flush">
+                {% for artifact in artifacts %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">
+                            <a href="{{ url_for('artifact_download', pipeline=pipeline, build_id=build_id, stage_id=stage_id, step_id=step_id, artifact_id=artifact.artifact_id) }}" target="_blank">{{ artifact.artifact_path }}</a>
+                        </div>
+                        <span class="font-monospace">{{ artifact.content_length | filesizeformat(binary=True) }}</span> | <span class="font-monospace">{{ artifact.content_type }}</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
