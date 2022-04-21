@@ -3,11 +3,12 @@
 import base64
 import hashlib
 import sys
+from typing import BinaryIO
 
 
-def calculate(fileobj):
+def calculate(file: BinaryIO):
     md5 = hashlib.md5()
-    for chunk in iter(lambda: fileobj.read(1024 * 1024), b""):
+    for chunk in iter(lambda: file.read(1024 * 1024), b""):
         md5.update(chunk)
     digest = md5.digest()
     return base64.b64encode(digest).decode("ascii")
