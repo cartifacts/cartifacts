@@ -251,6 +251,7 @@ def api_upload():
     pipeline_header = request.headers.get("Cartifacts-Pipeline")
     build_id_header = request.headers.get("Cartifacts-Build-ID")
     build_created_header = request.headers.get("Cartifacts-Build-Created")
+    build_link_header = request.headers.get("Cartifacts-Build-Link")
     stage_id_header = request.headers.get("Cartifacts-Stage-ID")
     step_id_header = request.headers.get("Cartifacts-Step-ID")
     artifact_path_header = request.headers.get("Cartifacts-Artifact-Path")
@@ -259,7 +260,7 @@ def api_upload():
     repo_link_header = request.headers.get("Cartifacts-Repo-Link")
 
     all_headers = (
-        pipeline_header, build_id_header, build_created_header, stage_id_header, step_id_header,
+        pipeline_header, build_id_header, build_created_header, build_link_header, stage_id_header, step_id_header,
         artifact_path_header, artifact_md5_header, repo_name_header, repo_link_header,
     )
 
@@ -298,6 +299,7 @@ def api_upload():
         "pipeline": pipeline_header,
         "build_id": build_id_header,
         "build_created": int(build_created_header),
+        "build_link": build_link_header,
     }
     pipeline_metadata = {
         "pipeline": pipeline_header,
