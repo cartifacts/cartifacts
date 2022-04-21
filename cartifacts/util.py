@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from mypy_boto3_s3.type_defs import ListObjectsV2OutputTypeDef
 
 
-def istimestamp(val: str) -> bool:
+def isonlydigits(val: str) -> bool:
     for char in val:
         if char not in ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9"):
             return False

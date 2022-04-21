@@ -15,7 +15,7 @@ from botocore.config import Config as BotoConfig
 from botocore.response import StreamingBody
 from flask import Flask, Response, json, render_template, request
 
-from cartifacts.util import istimestamp, s3_cp
+from cartifacts.util import isonlydigits, s3_cp
 from cartifacts.vendor.flask_boto3 import Boto3
 
 if TYPE_CHECKING:
@@ -77,10 +77,10 @@ class BuildId:
         return self.build_id.replace("$", "/")
 
 
-def bad_request(msg: str) -> Response:
+def bad_request(msg: str, /, *, code: int = HTTPStatus.BAD_REQUEST) -> Response:
     return Response(
         response=msg + "\n",
-        status=HTTPStatus.BAD_REQUEST,
+        status=code,
         content_type="text/plain; charset=utf-8"
     )
 
@@ -264,15 +264,18 @@ def api_upload():
     )
 
     if any(map(lambda val: not bool(val), all_headers)):
-        return bad_request("One or more metadata headers are missing.")
+        return bad_request("One or more metadata headers are missing or empty.")
 
     content_length = request.content_length
     if not content_length:
-        return bad_request("Content Length header must be specified and greater than zero.")
+        return bad_request(
+            "Content Length header must be specified and greater than zero.",
+            code=HTTPStatus.LENGTH_REQUIRED,
+        )
     content_type = request.content_type
     if not content_type:
         return bad_request("Content Type header must be specified and non-empty.")
-    if not istimestamp(build_created_header):
+    if not isonlydigits(build_created_header):
         return bad_request("Build Created header must be a plain UNIX timestamp.")
 
     pipeline = pipeline_header.replace("/", "$")
