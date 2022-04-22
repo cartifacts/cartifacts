@@ -21,4 +21,4 @@ def s3_cp(response: ListObjectsV2OutputTypeDef) -> Iterable[str]:
     return map(lambda cp: clean(cp["Prefix"]), response["CommonPrefixes"])
 
 
-__all__ = ("istimestamp", "s3_cp")
+__all__ = ("isonlydigits", "s3_cp")
