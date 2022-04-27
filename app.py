@@ -7,7 +7,7 @@ from collections import defaultdict
 from datetime import datetime
 from http import HTTPStatus
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Mapping, TextIO, cast
+from typing import TYPE_CHECKING, Dict, List, Mapping, TextIO, cast
 from uuid import uuid4
 from zoneinfo import ZoneInfo
 
@@ -15,6 +15,7 @@ from botocore.config import Config as BotoConfig
 from botocore.response import StreamingBody
 from flask import Flask, Response, json, render_template, request
 
+from cartifacts.types import ArtifactMetadata, BuildMetadata, PipelineMetadata
 from cartifacts.util import isonlydigits, s3_cp
 from cartifacts.vendor.flask_boto3 import Boto3
 
@@ -173,7 +174,9 @@ def build_view(pipeline: str, build_id: str):
         + r")\.json$"
     )
 
-    artifacts_metadata = defaultdict(lambda: defaultdict(list))
+    PerStepArtifactMetadata = Dict[str, List[ArtifactMetadata]]
+    PerStageArtifactMetadata = Dict[str, PerStepArtifactMetadata]
+    artifacts_metadata: PerStageArtifactMetadata = defaultdict(lambda: defaultdict(list))
 
     def process_build_response(response: ListObjectsV2OutputTypeDef):
         for s3_obj in response["Contents"]:
@@ -264,24 +267,17 @@ def api_upload():
     repo_name_header = request.headers.get("Cartifacts-Repo-Name")
     repo_link_header = request.headers.get("Cartifacts-Repo-Link")
 
-    all_headers = (
-        pipeline_header,
-        build_id_header,
-        build_created_header,
-        build_link_header,
-        stage_id_header,
-        step_id_header,
-        artifact_path_header,
-        artifact_md5_header,
-        repo_name_header,
-        repo_link_header,
-    )
-
-    if not pipeline_header or not build_id_header or not stage_id_header or not step_id_header:
-        # Satisfy the type checker
-        return bad_request("One or more metadata headers are missing or empty.")
-
-    if any(map(lambda val: not bool(val), all_headers)):
+    if (
+        not pipeline_header
+        or not build_id_header
+        or not stage_id_header
+        or not step_id_header
+        or not build_created_header
+        or not artifact_path_header
+        or not build_link_header
+        or not repo_name_header
+        or not repo_link_header
+    ):
         return bad_request("One or more metadata headers are missing or empty.")
 
     content_length = request.content_length
@@ -302,7 +298,7 @@ def api_upload():
     step_id = step_id_header.replace("/", "$")
 
     artifact_id = str(uuid4())
-    artifact_metadata = {
+    artifact_metadata: ArtifactMetadata = {
         "artifact_id": artifact_id,
         "artifact_path": artifact_path_header,
         "content_length": content_length,
@@ -312,13 +308,13 @@ def api_upload():
         "stage_id": stage_id_header,
         "step_id": step_id_header,
     }
-    build_metadata = {
+    build_metadata: BuildMetadata = {
         "pipeline": pipeline_header,
         "build_id": build_id_header,
         "build_created": int(build_created_header),
         "build_link": build_link_header,
     }
-    pipeline_metadata = {
+    pipeline_metadata: PipelineMetadata = {
         "pipeline": pipeline_header,
         "repo_name": repo_name_header,
         "repo_link": repo_link_header,
