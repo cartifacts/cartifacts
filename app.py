@@ -25,6 +25,10 @@ if TYPE_CHECKING:
     from mypy_boto3_s3.type_defs import ListObjectsV2OutputTypeDef
 
 
+PerStepArtifactMetadata = Dict[str, List[ArtifactMetadata]]
+PerStageArtifactMetadata = Dict[str, PerStepArtifactMetadata]
+
+
 CHUNK_SIZE = 16 * 1024
 UUID_REGEX = r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 
@@ -174,8 +178,6 @@ def build_view(pipeline: str, build_id: str):
         + r")\.json$"
     )
 
-    PerStepArtifactMetadata = Dict[str, List[ArtifactMetadata]]
-    PerStageArtifactMetadata = Dict[str, PerStepArtifactMetadata]
     artifacts_metadata: PerStageArtifactMetadata = defaultdict(lambda: defaultdict(list))
 
     def process_build_response(response: ListObjectsV2OutputTypeDef):
