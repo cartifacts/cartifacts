@@ -7,7 +7,7 @@ from collections import defaultdict
 from datetime import datetime
 from http import HTTPStatus
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Mapping
+from typing import TYPE_CHECKING, List, Mapping, TextIO, cast
 from uuid import uuid4
 from zoneinfo import ZoneInfo
 
@@ -88,7 +88,7 @@ def get_pipeline_metadata(s3: S3Client, pipeline: str) -> Mapping[str, str]:
         Bucket=BUCKET,
         Key=f"artifacts/pipelines/{pipeline}/metadata.json",
     )
-    return json.load(response["Body"])
+    return json.load(cast(TextIO, response["Body"]))
 
 
 def get_build_metadata(s3: S3Client, pipeline: str, build_id: str) -> Mapping[str, str]:
@@ -96,7 +96,7 @@ def get_build_metadata(s3: S3Client, pipeline: str, build_id: str) -> Mapping[st
         Bucket=BUCKET,
         Key=f"artifacts/pipelines/{pipeline}/builds/{build_id}/metadata.json",
     )
-    return json.load(response["Body"])
+    return json.load(cast(TextIO, response["Body"]))
 
 
 @app.get("/")
@@ -187,7 +187,7 @@ def build_view(pipeline: str, build_id: str):
                 Bucket=BUCKET,
                 Key=s3_obj["Key"],
             )
-            artifact_metadata = json.load(artifact_metadata_response["Body"])
+            artifact_metadata = json.load(cast(TextIO, artifact_metadata_response["Body"]))
             artifacts_metadata[stage_id][step_id].append(artifact_metadata)
 
     build_response = s3.list_objects_v2(
@@ -228,7 +228,7 @@ def artifact_download(pipeline: str, build_id: str, stage_id: str, step_id: str,
         Bucket=BUCKET,
         Key=artifact_metadata_key,
     )
-    artifact_metadata = json.load(artifact_metadata_response["Body"])
+    artifact_metadata = json.load(cast(TextIO, artifact_metadata_response["Body"]))
 
     filename = os.path.basename(artifact_metadata["artifact_path"])
     content_disposition = f'attachment; filename="{filename}"'
@@ -276,6 +276,10 @@ def api_upload():
         repo_name_header,
         repo_link_header,
     )
+
+    if not pipeline_header or not build_id_header or not stage_id_header or not step_id_header:
+        # Satisfy the type checker
+        return bad_request("One or more metadata headers are missing or empty.")
 
     if any(map(lambda val: not bool(val), all_headers)):
         return bad_request("One or more metadata headers are missing or empty.")
