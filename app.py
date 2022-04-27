@@ -270,11 +270,12 @@ def api_upload():
     if (
         not pipeline_header
         or not build_id_header
+        or not build_created_header
+        or not build_link_header
         or not stage_id_header
         or not step_id_header
-        or not build_created_header
         or not artifact_path_header
-        or not build_link_header
+        or not artifact_md5_header
         or not repo_name_header
         or not repo_link_header
     ):
