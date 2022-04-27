@@ -18,12 +18,14 @@ from flask import Flask, Response, json, render_template, request
 from cartifacts.util import isonlydigits, s3_cp
 from cartifacts.vendor.flask_boto3 import Boto3
 
+
 if TYPE_CHECKING:
     from mypy_boto3_s3 import S3Client
     from mypy_boto3_s3.type_defs import ListObjectsV2OutputTypeDef
 
 
 CHUNK_SIZE = 16 * 1024
+UUID_REGEX = r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 
 
 app = Flask(__name__)
@@ -78,11 +80,7 @@ class BuildId:
 
 
 def bad_request(msg: str, /, *, code: int = HTTPStatus.BAD_REQUEST) -> Response:
-    return Response(
-        response=msg + "\n",
-        status=code,
-        content_type="text/plain; charset=utf-8"
-    )
+    return Response(response=msg + "\n", status=code, content_type="text/plain; charset=utf-8")
 
 
 def get_pipeline_metadata(s3: S3Client, pipeline: str) -> Mapping[str, str]:
@@ -155,7 +153,10 @@ def pipeline_view(pipeline: str):
 
     return render_template(
         "pipeline/view.html",
-        pipeline=pipeline, metadata=metadata, build_ids=build_ids_sorted, timezone=APP_TZ,
+        pipeline=pipeline,
+        metadata=metadata,
+        build_ids=build_ids_sorted,
+        timezone=APP_TZ,
     )
 
 
@@ -165,7 +166,11 @@ def build_view(pipeline: str, build_id: str):
 
     build_prefix = f"artifacts/pipelines/{pipeline}/builds/{build_id}/"
     artifact_metadata_matcher = re.compile(
-        "^" + re.escape(build_prefix) + r"stages/([^/]+)/steps/([^/]+)/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.json$"
+        r"^"
+        + re.escape(build_prefix)
+        + r"stages/([^/]+)/steps/([^/]+)/("
+        + UUID_REGEX
+        + r")\.json$"
     )
 
     artifacts_metadata = defaultdict(lambda: defaultdict(list))
@@ -260,8 +265,16 @@ def api_upload():
     repo_link_header = request.headers.get("Cartifacts-Repo-Link")
 
     all_headers = (
-        pipeline_header, build_id_header, build_created_header, build_link_header, stage_id_header, step_id_header,
-        artifact_path_header, artifact_md5_header, repo_name_header, repo_link_header,
+        pipeline_header,
+        build_id_header,
+        build_created_header,
+        build_link_header,
+        stage_id_header,
+        step_id_header,
+        artifact_path_header,
+        artifact_md5_header,
+        repo_name_header,
+        repo_link_header,
     )
 
     if any(map(lambda val: not bool(val), all_headers)):
@@ -351,4 +364,6 @@ def api_upload():
         ContentType="application/json",
     )
 
-    return Response(response="Success!\n", status=HTTPStatus.OK, content_type="text/plain; charset=utf-8")
+    return Response(
+        response="Success!\n", status=HTTPStatus.OK, content_type="text/plain; charset=utf-8"
+    )

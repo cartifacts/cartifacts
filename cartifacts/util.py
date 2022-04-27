@@ -3,6 +3,7 @@ from __future__ import annotations
 import os.path
 from typing import TYPE_CHECKING, Iterable
 
+
 if TYPE_CHECKING:
     from mypy_boto3_s3.type_defs import ListObjectsV2OutputTypeDef
 

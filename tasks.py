@@ -1,5 +1,4 @@
 import os
-import shlex
 import sys
 
 from invoke import task, util
@@ -14,8 +13,8 @@ else:
 
 @task
 def reformat(c):
-    c.run("isort app.py cartifacts tasks.py", pty=pty)
-    c.run("black app.py cartifacts tasks.py", pty=pty)
+    c.run("isort --skip-glob 'cartifacts/vendor/*' app.py cartifacts tasks.py", pty=pty)
+    c.run("black --exclude 'vendor/' app.py cartifacts tasks.py", pty=pty)
 
 
 @task

@@ -27,3 +27,5 @@ ignore =
 
 # mccabe
 max-complexity = 10
+
+known-modules = boto3:[boto3,botocore],boto3-stubs:[mypy_boto3_s3]
