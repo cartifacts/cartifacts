@@ -101,7 +101,7 @@ def get_build_metadata(s3: S3Client, pipeline: str, build_id: str) -> Mapping[st
     return json.load(response["Body"])
 
 
-@app.route("/", methods=["GET"])
+@app.get("/")
 def home():
     s3: S3Client = boto.clients.get("s3")
 
@@ -124,7 +124,7 @@ def home():
     return render_template("home.html", pipeline_names=pipeline_names, timezone=APP_TZ)
 
 
-@app.route("/pipeline/<pipeline>", methods=["GET"])
+@app.get("/pipeline/<pipeline>")
 def pipeline_view(pipeline: str):
     s3: S3Client = boto.clients.get("s3")
 
@@ -159,7 +159,7 @@ def pipeline_view(pipeline: str):
     )
 
 
-@app.route("/pipeline/<pipeline>/build/<build_id>", methods=["GET"])
+@app.get("/pipeline/<pipeline>/build/<build_id>")
 def build_view(pipeline: str, build_id: str):
     s3: S3Client = boto.clients.get("s3")
 
@@ -212,7 +212,7 @@ def build_view(pipeline: str, build_id: str):
     )
 
 
-@app.route("/pipeline/<pipeline>/build/<build_id>/<stage_id>/<step_id>/<artifact_id>", methods=["GET"])
+@app.get("/pipeline/<pipeline>/build/<build_id>/<stage_id>/<step_id>/<artifact_id>")
 def artifact_download(pipeline: str, build_id: str, stage_id: str, step_id: str, artifact_id: str):
     s3: S3Client = boto.clients.get("s3")
 
@@ -246,7 +246,7 @@ def artifact_download(pipeline: str, build_id: str, stage_id: str, step_id: str,
     )
 
 
-@app.route("/api/upload", methods=["POST"])
+@app.post("/api/upload")
 def api_upload():
     pipeline_header = request.headers.get("Cartifacts-Pipeline")
     build_id_header = request.headers.get("Cartifacts-Build-ID")
