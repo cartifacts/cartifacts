@@ -13,15 +13,15 @@ else:
 
 @task
 def reformat(c):
-    c.run("isort --skip-glob 'cartifacts/vendor/*' app.py cartifacts tasks.py", pty=pty)
-    c.run("black --exclude 'vendor/' app.py cartifacts tasks.py", pty=pty)
+    c.run("isort --skip-glob 'cartifacts/vendor/*' app.py cartifacts s3md5.py tasks.py", pty=pty)
+    c.run("black --exclude 'vendor/' app.py cartifacts s3md5.py tasks.py", pty=pty)
 
 
 @task
 def lint(c):
-    c.run("flake8 --show-source --statistics app.py cartifacts tasks.py", pty=pty)
+    c.run("flake8 --show-source --statistics app.py cartifacts s3md5.py tasks.py", pty=pty)
 
 
 @task
 def type_check(c):
-    c.run("mypy app.py cartifacts", pty=pty)
+    c.run("mypy app.py cartifacts s3md5.py", pty=pty)
