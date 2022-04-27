@@ -16,3 +16,42 @@ boto3 = "^1.21.42"
 
 [tool.poetry.dev-dependencies]
 boto3-stubs = {extras = ["s3"], version = "^1.21.42"}
+
+# Code quality packages
+bandit = "^1.7.4"
+black = "^22.3.0"
+flake8 = "^4.0.1"
+flake8-annotations-complexity = "^0.0.7"
+flake8-bandit = "^3.0.0"
+flake8-breakpoint = "^1.1.0"
+flake8-bugbear = "^22.4.25"
+flake8-builtins = "^1.5.3"
+flake8-comprehensions = "^3.8.0"
+flake8-eradicate = "^1.2.1"
+flake8-expression-complexity = "^0.0.11"
+flake8-isort = "^4.1.1"
+flake8-requirements = "^1.5.3"
+invoke = "^1.7.0"
+isort = "^5.10.1"
+mypy = "^0.942"
+pep8-naming = "^0.12.1"
+
+[tool.black]
+target-version = ["py310"]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 100
+known_tests = "tests"
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,TESTS,LOCALFOLDER"
+lines_after_imports = 2
+lines_between_sections = 1
+
+[tool.mypy]
+check_untyped_defs = true
+strict_equality = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
