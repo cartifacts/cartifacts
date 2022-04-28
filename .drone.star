@@ -64,5 +64,6 @@ def main(ctx):
 
     if ctx.build.event in ("push", "pull_request"):
         pipelines.append(py_code_quality())
+        pipelines.append(spellcheck())
 
     return pipelines
