@@ -1,0 +1,47 @@
+---
+$schema: "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json"
+version: "0.2"
+language: "en-GB"
+dictionaryDefinitions:
+  - name: "dict-project"
+    path: ".cspell/project.dict.txt"
+    addWords: true
+  - name: "dict-deps"
+    path: ".cspell/deps.dict.txt"
+    addWords: true
+  - name: "dict-common-py"
+    path: ".cspell/common-py.dict.txt"
+    addWords: true
+  - name: "dict-common-py-config"
+    path: ".cspell/common-py-config.dict.txt"
+    addWords: true
+dictionaries:
+  # custom dictionaries
+  - "dict-project"
+  - "dict-deps"
+  - "dict-common-py"
+  # vendor dictionaries
+  - "python"
+useGitignore: true
+ignorePaths:
+  - "/cspell.yaml"
+  - "/.cspell/"
+  - "/static/*.min.*"
+  - "**/vendor/**/*"
+  - "**/*.lock"
+  - "/LICENSE.txt"
+overrides:
+  - filename: "/pyproject.toml"
+    dictionaries:
+      - "dict-common-py-config"
+      - "python"
+  - filename: "/static/**/*.css"
+    dictionaries:
+      - "css"
+  - filename: "/static/**/*.js"
+    dictionaries:
+      - "typescript"
+  - filename: "/templates/**/*.html"
+    dictionaries:
+      - "dict-project"
+      - "html"

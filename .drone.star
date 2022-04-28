@@ -1,4 +1,7 @@
+# cspell:words deps
+
 PY_IMAGE = "python:3.10"
+NODE_IMAGE = "node:16"
 
 def install_deps():
     return {
@@ -32,6 +35,27 @@ def py_code_quality():
             install_deps(),
             py_code_quality_step("lint", "inv lint"),
             py_code_quality_step("type-check", "inv type-check"),
+        ],
+    }
+
+def cspell():
+    return {
+        "name": "cspell",
+        "image": NODE_IMAGE,
+        "pull": "always",
+        "commands": [
+            "npm install -g cspell",
+            "cspell --version",
+            "cspell lint '**/*' '.*'",
+        ],
+    }
+
+def spellcheck():
+    return {
+        "kind": "pipeline",
+        "name": "spellcheck",
+        "steps": [
+            cspell(),
         ],
     }
 

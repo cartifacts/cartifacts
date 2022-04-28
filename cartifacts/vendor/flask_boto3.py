@@ -4,7 +4,7 @@ from flask import current_app
 
 
 class Boto3(object):
-    """Stores a bunch of boto3 conectors inside Flask's application context
+    """Stores a bunch of boto3 connectors inside Flask's application context
     for easier handling inside view functions.
 
     All connectors are stored inside the dict `boto3_cns` where the keys are
