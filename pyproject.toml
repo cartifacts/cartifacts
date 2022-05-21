@@ -12,10 +12,10 @@ license = "AGPLv3"
 [tool.poetry.dependencies]
 python = "^3.10"
 Flask = "^2.1.1"
-boto3 = "^1.22.1"
+boto3 = "^1.23.5"
 
 [tool.poetry.dev-dependencies]
-boto3-stubs = {extras = ["s3"], version = "^1.21.42"}
+boto3-stubs = {extras = ["s3"], version = "^1.23.5"}
 
 # Code quality packages
 bandit = "^1.7.4"
@@ -26,14 +26,14 @@ flake8-bandit = "^3.0.0"
 flake8-breakpoint = "^1.1.0"
 flake8-bugbear = "^22.4.25"
 flake8-builtins = "^1.5.3"
-flake8-comprehensions = "^3.8.0"
+flake8-comprehensions = "^3.10.0"
 flake8-eradicate = "^1.2.1"
 flake8-expression-complexity = "^0.0.11"
 flake8-isort = "^4.1.1"
 flake8-requirements = "^1.5.3"
-invoke = "^1.7.0"
+invoke = "^1.7.1"
 isort = "^5.10.1"
-mypy = "^0.942"
+mypy = "^0.950"
 pep8-naming = "^0.12.1"
 
 [tool.black]
