@@ -140,7 +140,7 @@ def pipeline_view(pipeline: str):
         Delimiter="^",
     )
 
-    build_sortkeys: List[str] = list(s3_cp(builds_response))
+    build_sort_keys: List[str] = list(s3_cp(builds_response))
     while builds_response["IsTruncated"]:
         builds_response = s3.list_objects_v2(
             Bucket=BUCKET,
@@ -148,13 +148,13 @@ def pipeline_view(pipeline: str):
             Delimiter="^",
             ContinuationToken=builds_response["NextContinuationToken"],
         )
-        build_sortkeys.extend(s3_cp(builds_response))
+        build_sort_keys.extend(s3_cp(builds_response))
 
-    def sep(build_sortkey: str) -> BuildId:
-        parts = build_sortkey.rpartition("$")
+    def sep(build_sort_key: str) -> BuildId:
+        parts = build_sort_key.rpartition("$")
         return BuildId(parts[0], int(parts[2][:-1]))
 
-    build_ids_sorted = sorted(map(sep, build_sortkeys), reverse=True)
+    build_ids_sorted = sorted(map(sep, build_sort_keys), reverse=True)
 
     return render_template(
         "pipeline/view.html",

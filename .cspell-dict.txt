@@ -2,8 +2,14 @@ djmattyg007
 cartifacts
 
 # project code
+desigil
+dtformat
+isonlydigits
 fileobj
 isatty
+
+# python stuff
+dataclass
 
 # dependencies
 boto

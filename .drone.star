@@ -1,4 +1,4 @@
-# cspell:words deps
+# cspell:words deps oneline printenv refs
 
 PY_IMAGE = "python:3.10"
 NODE_IMAGE = "node:16"
