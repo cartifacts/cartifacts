@@ -1,4 +1,0 @@
-stdlib
-thirdparty
-firstparty
-localfolder

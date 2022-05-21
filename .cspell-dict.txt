@@ -1,0 +1,18 @@
+djmattyg007
+cartifacts
+
+# project code
+fileobj
+isatty
+
+# dependencies
+boto
+botocore
+gitleaks
+zricethezav
+
+# python tool config
+stdlib
+thirdparty
+firstparty
+localfolder
