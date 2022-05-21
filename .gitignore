@@ -2,6 +2,9 @@
 *.pyc
 *.pyo
 
+/.mypy_cache/
+/.pytest_cache/
+
 /.idea/
 
 /config.json
