@@ -24,7 +24,7 @@ class Boto3(object):
         the services.
         """
         requested_services = frozenset(
-            svc.lower() for svc in current_app.config.get('BOTO3_SERVICES', [])
+            svc.lower() for svc in current_app.config.get('BOTO3_SERVICES', ())
         )
 
         region = current_app.config.get('BOTO3_REGION')
@@ -32,7 +32,7 @@ class Boto3(object):
             'aws_access_key_id': current_app.config.get('BOTO3_ACCESS_KEY'),
             'aws_secret_access_key': current_app.config.get('BOTO3_SECRET_KEY'),
             'profile_name': current_app.config.get('BOTO3_PROFILE'),
-            'region_name': region
+            'region_name': region,
         }
         sess = boto3.session.Session(**sess_params)
 
