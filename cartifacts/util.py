@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Iterable
 
 
 if TYPE_CHECKING:
-    from mypy_boto3_s3.type_defs import ListObjectsV2OutputTypeDef
+    from mypy_boto3_s3.type_defs import ListObjectsV2OutputTypeDef, ObjectIdentifierTypeDef
 
 
 def isonlydigits(val: str) -> bool:
@@ -22,4 +22,9 @@ def s3_cp(response: ListObjectsV2OutputTypeDef) -> Iterable[str]:
     return map(lambda cp: clean(cp["Prefix"]), response["CommonPrefixes"])
 
 
-__all__ = ("isonlydigits", "s3_cp")
+def s3_key(keys: Iterable[str]) -> Iterable[ObjectIdentifierTypeDef]:
+    for key in keys:
+        yield {"Key": key}
+
+
+__all__ = ("isonlydigits", "s3_cp", "s3_key")
