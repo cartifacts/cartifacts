@@ -19,7 +19,7 @@ def s3_cp(response: ListObjectsV2OutputTypeDef) -> Iterable[str]:
     def clean(prefix: str) -> str:
         return os.path.basename(prefix.rstrip("/"))
 
-    return map(lambda cp: clean(cp["Prefix"]), response["CommonPrefixes"])
+    return (clean(cp["Prefix"]) for cp in response["CommonPrefixes"])
 
 
 def s3_key(keys: Iterable[str]) -> Iterable[ObjectIdentifierTypeDef]:
