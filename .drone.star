@@ -1,7 +1,7 @@
 # cspell:words deps oneline printenv refs
 
 PY_IMAGE = "python:3.10-slim"
-NODE_IMAGE = "node:16-main"
+NODE_IMAGE = "node:16-slim"
 
 GIT_SAFE_CMD = "git config --global --add safe.directory /drone/src"
 
