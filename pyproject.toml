@@ -37,6 +37,7 @@ invoke = "^1.7.1"
 isort = "^5.10.1"
 mypy = "^0.971"
 pep8-naming = "^0.13.1"
+celery-types = "^0.13.1"
 
 [tool.black]
 target-version = ["py310"]
