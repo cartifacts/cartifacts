@@ -5,7 +5,7 @@ def make_celery(app):
     celery = Celery(app.import_name)
     celery.conf.update(app.config["CELERY_CONFIG"])
 
-    class ContextTask(celery.Task):
+    class ContextTask(celery.Task):  # type: ignore
         def __call__(self, *args, **kwargs):
             with app.app_context():
                 return self.run(*args, **kwargs)

@@ -508,17 +508,6 @@ zookeeper = ["kazoo (>=1.3.1)"]
 zstd = ["zstandard"]
 
 [[package]]
-name = "celery-types"
-version = "0.13.1"
-description = "Type stubs for Celery and its related packages"
-category = "dev"
-optional = false
-python-versions = ">=3.7,<4.0"
-
-[package.dependencies]
-typing-extensions = ">=3.10.0,<5.0.0"
-
-[[package]]
 name = "click"
 version = "8.1.2"
 description = "Composable command line interface toolkit"
@@ -1145,7 +1134,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "6e825a3ef955e8ceea84d1a2e4c745e406cf2b19c4af1635ef9b4f13355a807c"
+content-hash = "0e60798b55b61dc033fdf8af4cadd3ddaf724ad817c32c5803980cad602bbe9a"
 
 [metadata.files]
 amqp = [
@@ -1180,7 +1169,6 @@ celery = [
     {file = "celery-5.2.7-py3-none-any.whl", hash = "sha256:138420c020cd58d6707e6257b6beda91fd39af7afde5d36c6334d175302c0e14"},
     {file = "celery-5.2.7.tar.gz", hash = "sha256:fafbd82934d30f8a004f81e8f7a062e31413a23d444be8ee3326553915958c6d"},
 ]
-celery-types = []
 click = [
     {file = "click-8.1.2-py3-none-any.whl", hash = "sha256:24e1a4a9ec5bf6299411369b208c1df2188d9eb8d916302fe6bf03faed227f1e"},
     {file = "click-8.1.2.tar.gz", hash = "sha256:479707fe14d9ec9a0757618b7a100a0ae4c4e236fac5b7f80ca68028141a1a72"},
