@@ -1,7 +1,7 @@
 # cspell:words deps oneline printenv refs
 
-PY_IMAGE = "python:3.10"
-NODE_IMAGE = "node:16"
+PY_IMAGE = "python:3.10-slim"
+NODE_IMAGE = "node:16-main"
 
 GIT_SAFE_CMD = "git config --global --add safe.directory /drone/src"
 
@@ -30,7 +30,7 @@ def install_deps():
             "python3 -m venv .venv",
             ". .venv/bin/activate",
             "pip install --upgrade --no-cache-dir pip wheel poetry",
-            "poetry install --no-root",
+            "poetry install --no-root --no-interaction",
         ],
     }
 
