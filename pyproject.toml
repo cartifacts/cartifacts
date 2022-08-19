@@ -58,3 +58,9 @@ strict_equality = true
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
+
+[[tool.mypy.override]]
+module = [
+    "rule_engine",
+]
+ignore_missing_imports = true
