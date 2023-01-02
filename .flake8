@@ -13,10 +13,14 @@ select =
     N
     # flake8-bandit
     S
+    # flake8-black
+    BLK
     # flake8-annotations-complexity
     TAE
     # flake8-expression-complexity
     ECE
+    # flake8-executable
+    EXE
 ignore =
     # E203: whitespace before ':' (replaced by Black)
     E203
