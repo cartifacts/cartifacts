@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import boto3
 from flask import _app_ctx_stack as stack
-from flask import current_app
+from flask import Flask, current_app
 
 
 class Boto3(object):
@@ -11,12 +13,12 @@ class Boto3(object):
     the name of the services and the values their associated boto3 client.
     """
 
-    def __init__(self, app=None):
+    def __init__(self, app: Flask | None = None) -> None:
         self.app = app
         if self.app is not None:
             self.init_app(app)
 
-    def init_app(self, app):
+    def init_app(self, app: Flask) -> None:
         app.teardown_appcontext(self.teardown)
 
     def connect(self):

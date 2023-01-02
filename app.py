@@ -142,7 +142,7 @@ def load_builds_for_pipeline(s3: S3Client, pipeline: str, /) -> Iterable[BuildId
     return map(sep, build_sort_keys)
 
 
-@celery.task(ignore_result=True)
+@celery.task(ignore_result=True)  # type: ignore
 def clean_expired_artifacts(pipeline: str) -> None:
     @dataclasses.dataclass(frozen=True, slots=True)
     class PossiblyExpiredBuild:

@@ -9,12 +9,12 @@ if TYPE_CHECKING:
     from flask import Flask
 
 
-def make_celery(app: Flask):
+def make_celery(app: Flask) -> Celery:
     celery = Celery(app.import_name)
     celery.conf.update(app.config["CELERY_CONFIG"])
 
     class ContextTask(celery.Task):  # type: ignore
-        def __call__(self, *args, **kwargs):
+        def __call__(self, *args, **kwargs):  # type: ignore
             with app.app_context():
                 return self.run(*args, **kwargs)
 
