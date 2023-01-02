@@ -28,6 +28,7 @@ ignore =
     E501
     # W503: line break before binary operator (not PEP8 compliant)
     W503
+extend-exclude = cartifacts/vendor/
 
 # mccabe
 max-complexity = 10

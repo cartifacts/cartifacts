@@ -40,7 +40,7 @@ class Boto3(object):
         for svc in requested_services:
             # Check for optional parameters
             params = current_app.config.get(
-                'BOTO3_OPTIONAL_PARAMS', {}
+                "BOTO3_OPTIONAL_PARAMS", {}
             ).get(svc, {})
 
             # Get session params and override them with kwargs
