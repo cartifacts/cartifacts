@@ -88,7 +88,7 @@ class BuildId:
     build_id: str = dataclasses.field(compare=False)
     created_at: int
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, BuildId):
             return NotImplemented
 
@@ -104,7 +104,8 @@ def get_pipeline_metadata(s3: S3Client, pipeline: str) -> Mapping[str, str]:
         Bucket=BUCKET,
         Key=f"{PIPELINES_PREFIX}{pipeline}/metadata.json",
     )
-    return json.load(cast(TextIO, response["Body"]))
+    response_data = json.load(cast(TextIO, response["Body"]))
+    return cast(Mapping[str, str], response_data)
 
 
 def get_build_metadata(s3: S3Client, pipeline: str, build_id: str) -> Mapping[str, str]:
@@ -112,7 +113,8 @@ def get_build_metadata(s3: S3Client, pipeline: str, build_id: str) -> Mapping[st
         Bucket=BUCKET,
         Key=f"{PIPELINES_PREFIX}{pipeline}/builds/{build_id}/metadata.json",
     )
-    return json.load(cast(TextIO, response["Body"]))
+    response_data = json.load(cast(TextIO, response["Body"]))
+    return cast(Mapping[str, str], response_data)
 
 
 def load_builds_for_pipeline(s3: S3Client, pipeline: str, /) -> Iterable[BuildId]:
@@ -234,7 +236,9 @@ def build_view(pipeline: str, build_id: str) -> str:
 
     artifacts_metadata: PerStageArtifactMetadata = defaultdict(lambda: defaultdict(list))
 
-    def process_build_response(response: ListObjectsV2OutputTypeDef):
+    def process_build_response(response: ListObjectsV2OutputTypeDef) -> None:
+        nonlocal artifacts_metadata
+
         for s3_obj in response["Contents"]:
             artifact_metadata_match = artifact_metadata_matcher.match(s3_obj["Key"])
             if not artifact_metadata_match:

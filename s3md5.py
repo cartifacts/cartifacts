@@ -8,7 +8,7 @@ import sys
 from typing import BinaryIO
 
 
-def calculate(file: BinaryIO):
+def calculate(file: BinaryIO) -> str:
     md5 = hashlib.md5(usedforsecurity=False)
     for chunk in iter(lambda: file.read(1024 * 1024), b""):
         md5.update(chunk)

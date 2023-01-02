@@ -53,6 +53,7 @@ lines_after_imports = 2
 python_version = "3.10"
 strict = true
 warn_unreachable = true
+exclude = "vendor/"
 
 [[tool.mypy.overrides]]
 module = [
