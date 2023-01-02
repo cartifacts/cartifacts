@@ -165,10 +165,14 @@ def clean_expired_artifacts(pipeline: str) -> None:
     for build in expired_builds_rule.filter(builds):
         build_data = build._build_data
         prefix = f"{PIPELINES_PREFIX}{pipeline}/builds"
-        bucket.delete_objects(Delete={
-            "Objects": list(s3_key((f"{prefix}/{build_data.build_id}${build_data.created_at}^",))),
-            "Quiet": True,
-        })
+        bucket.delete_objects(
+            Delete={
+                "Objects": list(
+                    s3_key((f"{prefix}/{build_data.build_id}${build_data.created_at}^",))
+                ),
+                "Quiet": True,
+            }
+        )
         bucket.objects.filter(Prefix=f"{prefix}/{build_data.build_id}/").delete()
 
 
@@ -273,7 +277,9 @@ def build_view(pipeline: str, build_id: str) -> str:
 
 
 @app.get("/pipeline/<pipeline>/build/<build_id>/<stage_id>/<step_id>/<artifact_id>")
-def artifact_download(pipeline: str, build_id: str, stage_id: str, step_id: str, artifact_id: str) -> Response:
+def artifact_download(
+    pipeline: str, build_id: str, stage_id: str, step_id: str, artifact_id: str
+) -> Response:
     s3: S3Client = boto.clients.get("s3")
 
     artifact_key = f"{PIPELINES_PREFIX}{pipeline}/builds/{build_id}/stages/{stage_id}/steps/{step_id}/{artifact_id}"

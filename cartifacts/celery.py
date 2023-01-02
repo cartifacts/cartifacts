@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from celery import Celery
 
+
 if TYPE_CHECKING:
     from flask import Flask
 
