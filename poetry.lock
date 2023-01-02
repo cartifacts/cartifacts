@@ -831,6 +831,21 @@ eradicate = ">=2.0,<3.0"
 flake8 = ">=3.5,<6"
 
 [[package]]
+name = "flake8-executable"
+version = "2.1.2"
+description = "A Flake8 plugin for checking executable permissions and shebangs."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "flake8-executable-2.1.2.tar.gz", hash = "sha256:ecc80a70d8e4ac21d5b2a27c730770b2a4b96542ee4d82b9be5bad0e22fd5a70"},
+    {file = "flake8_executable-2.1.2-py3-none-any.whl", hash = "sha256:871f88a612bb9e816e00a37c044f17fe772269ac3f39f01aeecebdfeb40dba7b"},
+]
+
+[package.dependencies]
+flake8 = ">=3.0.0"
+
+[[package]]
 name = "flake8-expression-complexity"
 version = "0.0.11"
 description = "A flake8 extension that checks expressions complexity"
@@ -1578,4 +1593,4 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "90e5102d4e4ee7b045091274b655a8c24cb478afd7f324434f2c69f25c5e1eeb"
+content-hash = "a9d8187fb3309af9d5650487de56eb6f0032814f0ff19ce409c41eae6e9888e6"
