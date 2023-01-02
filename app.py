@@ -141,7 +141,7 @@ def load_builds_for_pipeline(s3: S3Client, pipeline: str, /) -> Iterable[BuildId
 
 
 @celery.task(ignore_result=True)
-def clean_expired_artifacts(pipeline: str):
+def clean_expired_artifacts(pipeline: str) -> None:
     @dataclasses.dataclass(frozen=True, slots=True)
     class PossiblyExpiredBuild:
         _build_data: BuildId
@@ -177,7 +177,7 @@ def bad_request(msg: str, /, *, code: int = HTTPStatus.BAD_REQUEST) -> Response:
 
 
 @app.get("/")
-def home():
+def home() -> str:
     s3: S3Client = boto.clients.get("s3")
 
     pipelines_response = s3.list_objects_v2(
@@ -199,7 +199,7 @@ def home():
 
 
 @app.get("/pipeline/<pipeline>")
-def pipeline_view(pipeline: str):
+def pipeline_view(pipeline: str) -> str:
     s3: S3Client = boto.clients.get("s3")
 
     metadata = get_pipeline_metadata(s3, pipeline)
@@ -216,7 +216,7 @@ def pipeline_view(pipeline: str):
 
 
 @app.get("/pipeline/<pipeline>/build/<build_id>")
-def build_view(pipeline: str, build_id: str):
+def build_view(pipeline: str, build_id: str) -> str:
     s3: S3Client = boto.clients.get("s3")
 
     build_prefix = f"{PIPELINES_PREFIX}{pipeline}/builds/{build_id}/"
@@ -273,7 +273,7 @@ def build_view(pipeline: str, build_id: str):
 
 
 @app.get("/pipeline/<pipeline>/build/<build_id>/<stage_id>/<step_id>/<artifact_id>")
-def artifact_download(pipeline: str, build_id: str, stage_id: str, step_id: str, artifact_id: str):
+def artifact_download(pipeline: str, build_id: str, stage_id: str, step_id: str, artifact_id: str) -> Response:
     s3: S3Client = boto.clients.get("s3")
 
     artifact_key = f"{PIPELINES_PREFIX}{pipeline}/builds/{build_id}/stages/{stage_id}/steps/{step_id}/{artifact_id}"
@@ -307,7 +307,7 @@ def artifact_download(pipeline: str, build_id: str, stage_id: str, step_id: str,
 
 
 @app.post("/api/upload")
-def api_upload():
+def api_upload() -> Response:
     pipeline_header = request.headers.get("Cartifacts-Pipeline")
     build_id_header = request.headers.get("Cartifacts-Build-ID")
     build_created_header = request.headers.get("Cartifacts-Build-Created")

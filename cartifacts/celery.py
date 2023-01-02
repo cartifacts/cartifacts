@@ -1,7 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from celery import Celery
 
+if TYPE_CHECKING:
+    from flask import Flask
 
-def make_celery(app):
+
+def make_celery(app: Flask):
     celery = Celery(app.import_name)
     celery.conf.update(app.config["CELERY_CONFIG"])
 
